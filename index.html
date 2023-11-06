@@ -162,6 +162,23 @@
             const oMark = player.player2.mark;
             const tilesArray = Gameboard.gameboard;
             
+            function checkForWin(playerMark) {
+                const winningCombos = [
+                    [0, 1, 2], [0, 3, 6], [0, 4, 8],
+                    [6, 4, 2], [4, 1, 7], [5, 8, 2],
+                    [6, 7, 8], [3, 4, 5]
+                ];
+
+                for (const combo of winningCombos) {
+                    const [a, b, c] = combo;
+                    if (tilesArray[a].textContent === playerMark &&
+                        tilesArray[b].textContent === playerMark &&
+                        tilesArray[c].textContent === playerMark) {
+                        return true;
+                    }
+                }
+                return false;
+                }
 
             for (let i = 0; i < gridSquares.length; i++){
                 let gridSquare = gridSquares[i];
@@ -169,43 +186,16 @@
                 
                 gridSquare.style.fontSize = '225px';
                 gridSquare.addEventListener('click', function() {
+                    if (gridSquare.textContent === '') {
+
+                    }
                     if(currentPlayer === player.player1 && 
                     gridSquare.textContent == '')
                     {
                         gridSquare.textContent = xMark;
                         toggleActivePlayer();
-                        
-                        if(tilesArray[0].textContent ==  xMark
-                         && tilesArray[1].textContent ==  xMark
-                          && tilesArray[2].textContent ==  xMark
-                           ||
-                           tilesArray[0].textContent ==  xMark
-                         && tilesArray[3].textContent ==  xMark
-                          && tilesArray[6].textContent ==  xMark
-                           ||
-                           tilesArray[0].textContent ==  xMark
-                         && tilesArray[4].textContent ==  xMark
-                          && tilesArray[8].textContent ==  xMark
-                           ||
-                           tilesArray[6].textContent ==  xMark
-                         && tilesArray[4].textContent ==  xMark
-                          && tilesArray[2].textContent ==  xMark
-                           ||
-                           tilesArray[4].textContent ==  xMark
-                         && tilesArray[1].textContent ==  xMark
-                          && tilesArray[7].textContent ==  xMark 
-                          ||
-                          tilesArray[5].textContent ==  xMark
-                         && tilesArray[8].textContent ==  xMark
-                          && tilesArray[2].textContent ==  xMark 
-                          || 
-                          tilesArray[6].textContent ==  xMark
-                         && tilesArray[7].textContent ==  xMark
-                          && tilesArray[8].textContent ==  xMark 
-                          || 
-                          tilesArray[3].textContent ==  xMark
-                         && tilesArray[4].textContent ==  xMark
-                          && tilesArray[5].textContent ==  xMark) 
+
+                        if(checkForWin(xMark)) 
                           {
                             console.log(player.player1.displayPlayer())
                        }
@@ -215,37 +205,7 @@
                     {
                         gridSquare.textContent = oMark;
                         toggleActivePlayer();
-                        if(tilesArray[0].textContent ==  oMark
-                         && tilesArray[1].textContent ==  oMark
-                          && tilesArray[2].textContent ==  oMark
-                           ||
-                           tilesArray[0].textContent ==  oMark
-                         && tilesArray[3].textContent ==  oMark
-                          && tilesArray[6].textContent ==  oMark
-                           ||
-                           tilesArray[0].textContent ==  oMark
-                         && tilesArray[4].textContent ==  oMark
-                          && tilesArray[8].textContent ==  oMark
-                           ||
-                           tilesArray[6].textContent ==  oMark
-                         && tilesArray[4].textContent ==  oMark
-                          && tilesArray[2].textContent ==  oMark
-                           ||
-                           tilesArray[4].textContent ==  oMark
-                         && tilesArray[1].textContent ==  oMark
-                          && tilesArray[7].textContent ==  oMark 
-                          ||
-                          tilesArray[5].textContent ==  oMark
-                         && tilesArray[8].textContent ==  oMark
-                          && tilesArray[2].textContent ==  oMark 
-                          || 
-                          tilesArray[6].textContent ==  oMark
-                         && tilesArray[7].textContent ==  oMark
-                          && tilesArray[8].textContent ==  oMark 
-                          || 
-                          tilesArray[3].textContent ==  oMark
-                         && tilesArray[4].textContent ==  oMark
-                          && tilesArray[5].textContent ==  oMark) 
+                        if(checkForWin(oMark)) 
                           {
                             console.log(player.player2.displayPlayer())
                        }
