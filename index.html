@@ -38,14 +38,15 @@
     <script>
         //GAME BOARD
         const Board = (function createGridCells() {
+
             const gridSize = 3; // Change this to adjust the grid size
             const gameCells = gridSize * gridSize;/// multiply gridsize for gameboard
-            const gamePlayBoard = document.createElement('div')/// create individual game squares
-            gamePlayBoard.setAttribute('id', 'game-play-board');
-            gamePlayBoard.style.display = 'flex';
-            gamePlayBoard.style.flexWrap = 'wrap';
-            gamePlayBoard.style.width = '600px';
-            gamePlayBoard.style.border = 'solid 1px red';
+            const gamePlayBoard = document.createElement('div') 
+                gamePlayBoard.setAttribute('id', 'game-play-board');
+                gamePlayBoard.style.display = 'flex';
+                gamePlayBoard.style.flexWrap = 'wrap';
+                gamePlayBoard.style.width = '600px';
+                gamePlayBoard.style.border = 'solid 1px red';
 //game-play-board
             for (let i = 0; i < gameCells; i++) {
                 const gridCell = document.createElement('div');
@@ -53,22 +54,22 @@
                 let idString = id.toString();
                 gridCell.setAttribute('class', 'grid-cell');
                 gridCell.setAttribute('id', `${idString}`);
+                gridCell.textContent = `${idString}`;
                 gridCell.style.width = '200px'; 
                 gridCell.style.height = '200px'; 
                 gridCell.style.border = 'solid 1px red';
                 gridCell.style.boxSizing = 'border-box';
+                gridCell.style.display = 'flex';
+                gridCell.style.lineHeight = '195px';
+                gridCell.style.justifyContent = 'center';
                 gamePlayBoard.append(gridCell);
             }
             
             document.body.append(gamePlayBoard);
 
-
-            const writeToCell = (selector, message) => {
-                document.querySelector(selector).innerHTML = message;
-            }
             
             return {
-                writeToCell,
+               
                 gamePlayBoard,
                 
             }
@@ -77,64 +78,70 @@
         })()
 
      //Revealing module function   
-        const Gameboard = (function() {
+    const Gameboard = (function() {
         let gameboard = [];    
         let gridSquare;
-            function addSquaresToArray() {
-                let gridSquares= document.getElementsByClassName('grid-cell');
 
-                for(let i = 0; i < gridSquares.length; i++) {
-                   let gridSquare =  gridSquares[i];
-                    gameboard.push(gridSquare);
-                    
-                    
-                }
-                
-                return {
-                    gameboard,
-                    gridSquare,
-                }                
-                   
-            }
-            function clearSquares() {
-                let gridSquares= document.getElementsByClassName('grid-cell');
+        function addSquaresToArray() {
+            let gridSquares= document.getElementsByClassName('grid-cell');
 
-                for(let i = 0; i < gridSquares.length; i++) {
+            for(let i = 0; i < gridSquares.length; i++) {
+
                 let gridSquare =  gridSquares[i];
-                    gridSquare.textContent = '';
-                    
-                    
-                }
-            }      
-            return {
-                gameboard,
-                addSquaresToArray: addSquaresToArray,
-                clearSquares: clearSquares,
-                
+                gameboard.push(gridSquare);
+                                    
             }
             
-        })();
+            return {
+
+                gameboard,
+                gridSquare,
+
+            }                
+                
+        }
+
+        function clearSquares() {
+            let gridSquares= document.getElementsByClassName('grid-cell');
+
+            for(let i = 0; i < gridSquares.length; i++) {
+            let gridSquare =  gridSquares[i];
+                gridSquare.textContent = '';
+                
+                
+            }
+        } 
+
+        return {
+            gameboard,
+            addSquaresToArray: addSquaresToArray,
+            clearSquares: clearSquares,
+            
+        }
+        
+    })();
 
         
         
        const player = (function () {
-            //Create an object and define its properties
-            
+            //Create an object and define its properties 
             const player1 = {
                 name: 'Player-X',
                 mark: 'X',
                 player: 'player1',
-                displayPlayer: function(newName) {
-                    this.name = newName;
-                    render();
+                
+                displayPlayer: function() {
+                    this.name;
                     console.log(`${this.name} ${this.player} won`);
                 },
                 
             }
+            //Player 2 Obj
             const player2 = {
                 name: 'Player-O',
                 mark: 'O',
                 player: 'player2',
+
                 displayPlayer: function() {
                     console.log(`${this.name} ${this.player} won`)
                 },
@@ -151,18 +158,98 @@
             Gameboard.addSquaresToArray();
             const gridSquares = document.getElementsByClassName('grid-cell');
             let currentPlayer = player.player1;
+            const xMark = player.player1.mark;
+            const oMark = player.player2.mark;
+            const tilesArray = Gameboard.gameboard;
+            
 
             for (let i = 0; i < gridSquares.length; i++){
                 let gridSquare = gridSquares[i];
+                
+                
+                gridSquare.style.fontSize = '225px';
                 gridSquare.addEventListener('click', function() {
-                    if(currentPlayer === player.player1 && gridSquare.textContent == ''){
-                        gridSquare.textContent = player.player1.mark;
+                    if(currentPlayer === player.player1 && 
+                    gridSquare.textContent == '')
+                    {
+                        gridSquare.textContent = xMark;
                         toggleActivePlayer();
-                        console.log(this);
-                    } else if(currentPlayer === player.player2 && gridSquare.textContent == '') {
-                        gridSquare.textContent = player.player2.mark;
+                        
+                        if(tilesArray[0].textContent ==  xMark
+                         && tilesArray[1].textContent ==  xMark
+                          && tilesArray[2].textContent ==  xMark
+                           ||
+                           tilesArray[0].textContent ==  xMark
+                         && tilesArray[3].textContent ==  xMark
+                          && tilesArray[6].textContent ==  xMark
+                           ||
+                           tilesArray[0].textContent ==  xMark
+                         && tilesArray[4].textContent ==  xMark
+                          && tilesArray[8].textContent ==  xMark
+                           ||
+                           tilesArray[6].textContent ==  xMark
+                         && tilesArray[4].textContent ==  xMark
+                          && tilesArray[2].textContent ==  xMark
+                           ||
+                           tilesArray[4].textContent ==  xMark
+                         && tilesArray[1].textContent ==  xMark
+                          && tilesArray[7].textContent ==  xMark 
+                          ||
+                          tilesArray[5].textContent ==  xMark
+                         && tilesArray[8].textContent ==  xMark
+                          && tilesArray[2].textContent ==  xMark 
+                          || 
+                          tilesArray[6].textContent ==  xMark
+                         && tilesArray[7].textContent ==  xMark
+                          && tilesArray[8].textContent ==  xMark 
+                          || 
+                          tilesArray[3].textContent ==  xMark
+                         && tilesArray[4].textContent ==  xMark
+                          && tilesArray[5].textContent ==  xMark) 
+                          {
+                            console.log(player.player1.displayPlayer())
+                       }
+                      
+                       
+                    } else if(currentPlayer === player.player2 && gridSquare.textContent == '') 
+                    {
+                        gridSquare.textContent = oMark;
                         toggleActivePlayer();
-                        console.log(this);
+                        if(tilesArray[0].textContent ==  oMark
+                         && tilesArray[1].textContent ==  oMark
+                          && tilesArray[2].textContent ==  oMark
+                           ||
+                           tilesArray[0].textContent ==  oMark
+                         && tilesArray[3].textContent ==  oMark
+                          && tilesArray[6].textContent ==  oMark
+                           ||
+                           tilesArray[0].textContent ==  oMark
+                         && tilesArray[4].textContent ==  oMark
+                          && tilesArray[8].textContent ==  oMark
+                           ||
+                           tilesArray[6].textContent ==  oMark
+                         && tilesArray[4].textContent ==  oMark
+                          && tilesArray[2].textContent ==  oMark
+                           ||
+                           tilesArray[4].textContent ==  oMark
+                         && tilesArray[1].textContent ==  oMark
+                          && tilesArray[7].textContent ==  oMark 
+                          ||
+                          tilesArray[5].textContent ==  oMark
+                         && tilesArray[8].textContent ==  oMark
+                          && tilesArray[2].textContent ==  oMark 
+                          || 
+                          tilesArray[6].textContent ==  oMark
+                         && tilesArray[7].textContent ==  oMark
+                          && tilesArray[8].textContent ==  oMark 
+                          || 
+                          tilesArray[3].textContent ==  oMark
+                         && tilesArray[4].textContent ==  oMark
+                          && tilesArray[5].textContent ==  oMark) 
+                          {
+                            console.log(player.player2.displayPlayer())
+                       }
+                      
                     }
                     
                 })
@@ -179,8 +266,7 @@
                         currentPlayer = player.player1;
                     }
                 }
-
-            
+  
         };
 
 
