@@ -33,6 +33,7 @@
     </div>
     <div id="winner-display">
         <h3>Winner:</h3>
+        <div id="winner-message"></div>
     </div>
 
     <script>
@@ -131,8 +132,7 @@
                 player: 'player1',
                 
                 displayPlayer: function() {
-                    this.name;
-                    console.log(`${this.name} ${this.player} won`);
+                    return(`${this.name} ${this.player} won`);
                 },
                 
             }
@@ -143,7 +143,7 @@
                 player: 'player2',
 
                 displayPlayer: function() {
-                    console.log(`${this.name} ${this.player} won`)
+                    return(`${this.name} ${this.player} won`)
                 },
             } 
                       
@@ -180,42 +180,52 @@
                 return false;
                 }
 
-            for (let i = 0; i < gridSquares.length; i++){
-                let gridSquare = gridSquares[i];
-                
-                
-                gridSquare.style.fontSize = '225px';
-                gridSquare.addEventListener('click', function() {
-                    if (gridSquare.textContent === '') {
-
-                    }
-                    if(currentPlayer === player.player1 && 
-                    gridSquare.textContent == '')
-                    {
-                        gridSquare.textContent = xMark;
-                        toggleActivePlayer();
-
-                        if(checkForWin(xMark)) 
-                          {
-                            console.log(player.player1.displayPlayer())
-                       }
-                      
-                       
-                    } else if(currentPlayer === player.player2 && gridSquare.textContent == '') 
-                    {
-                        gridSquare.textContent = oMark;
-                        toggleActivePlayer();
-                        if(checkForWin(oMark)) 
-                          {
-                            console.log(player.player2.displayPlayer())
-                       }
-                      
-                    }
+                for (let i = 0; i < gridSquares.length; i++){
+                    let gridSquare = gridSquares[i];
+                    let winMessage = document.getElementById('winner-message');
+                    winMessage.textContent = '';
                     
-                })
-                
-                
-            }
+                    gridSquare.style.fontSize = '225px';
+                    gridSquare.addEventListener('click', function() {
+
+                        if (gridSquare.textContent === '') {
+
+                        }
+                        if(currentPlayer === player.player1 && 
+                        gridSquare.textContent == '')
+                        {
+                            gridSquare.textContent = xMark;
+                            toggleActivePlayer();
+
+                            if(checkForWin(xMark)) 
+                            {
+                            
+
+                            let winningMessage = player.player1.displayPlayer();
+                                winMessage.append(winningMessage);
+                                
+                        }
+                        
+                        
+                        } else if(currentPlayer === player.player2 && gridSquare.textContent == '') 
+                        {
+                            gridSquare.textContent = oMark;
+                            toggleActivePlayer();
+                            if(checkForWin(oMark)) 
+                            {let winMessage = document.getElementById('winner-message');
+                            
+
+                            let winningMessage = player.player2.displayPlayer();
+                                winMessage.append(winningMessage);
+                        }
+                           
+                        
+                        }
+                        
+                    })
+                    
+                    
+                }
 
            
                 // Function to toggle the active player
