@@ -8,9 +8,6 @@
         *{
             box-sizing: border-box;
         }
-        /* h1,h2,h3,h4,h5,h6{
-            margin:0;
-        } */
         body{
             display:flex;
             flex-direction: column;
@@ -42,7 +39,7 @@
 </head>
 <body>
     <h1>Tic Tac Toe</h1>
-    <button id="start-game" onclick="Gameplay()">Start Game</button>
+    <button id="start-game" onclick="GameFlow()">Start Game</button>
     <div id="player-div">
         <h2>Player X </h2>
         <h2>Player O</h2>
@@ -54,7 +51,8 @@
 
     <script>
         //GAME BOARD
-    const Board = (function createGridCells() {
+    const Gameboard = (function createGridCells() {
+        const gameboard = []; 
 
             const gridSize = 3; // Change this to adjust the grid size
             const gameCells = gridSize * gridSize;/// multiply gridsize for gameboard
@@ -81,58 +79,18 @@
                 gridCell.style.fontSize = '130px'
                 gridCell.style.justifyContent = 'center';
                 gamePlayBoard.append(gridCell);
+                gameboard.push(gridCell);
+                
             }
             
             document.body.append(gamePlayBoard);
             
-            return {               
-                gamePlayBoard,                
+            return {
+                gameboard,
+                
             }
-            
         })();
     
-        //Revealing module function   
-    const Gameboard = (function() {
-        const gridSquares = document.getElementsByClassName('grid-cell');
-        const gameboard = [];    
-        // let gridSquare;
-
-        // function addSquaresToArray() {
-        //     // let gridSquares= document.getElementsByClassName('grid-cell');
-
-        //     for(let i = 0; i < gridSquares.length; i++) {
-        //         let gridSquare =  gridSquares[i];
-        //         gameboard.push(gridSquare);                   
-        //     }
-            
-        //     return {
-
-        //         gameboard,
-        //         // gridSquare,
-
-        //     }                
-                
-        // }
-        function clearSquares() {
-            let gridSquares= document.getElementsByClassName('grid-cell');
-
-            for(let i = 0; i < gridSquares.length; i++) {
-            let gridSquare =  gridSquares[i];
-                gridSquare.textContent = '';                
-            }
-        } 
-
-        return {
-            gameboard,
-            // gridSquare,
-            // addSquaresToArray: addSquaresToArray,
-            clearSquares: clearSquares, 
-        }
-        
-    })();
-
-        
-        
     const player = (function () {
             //Create an object and define its properties 
             const player1 = {
@@ -160,144 +118,147 @@
                 player2
             }
 
-        })()
-        
+        })();   
        
-
-    function Gameplay() {
+    function GameFlow() {
             
-            Gameboard.clearSquares();
-            // Gameboard.addSquaresToArray();
-            const gridSquares = document.getElementsByClassName('grid-cell');
-            for(let i = 0; i < gridSquares.length; i++) {
-                let gridSquare =  gridSquares[i];
-                Gameboard.gameboard.push(gridSquare); 
-                // let gridSquare = tilesArray[i];
-                    let winMessage = document.getElementById('winner-message');
-                    winMessage.textContent = '';
+        clearSquares();
+
+        let currentPlayer = player.player1;
+        const xMark = player.player1.mark;
+        const oMark = player.player2.mark;
+        const tilesArray = Gameboard.gameboard;
+
+        let winMessage = document.getElementById('winner-message');
+            winMessage.textContent = ''; 
+
+        const gridSquares = document.getElementsByClassName('grid-cell');
+        for (let i = 0; i < gridSquares.length; i++){
+            let gridSquare = gridSquares[i];       
+            // gridSquare.style.fontSize = '225px';
+            gridSquare.addEventListener('click', function() {
+
+                if(currentPlayer === player.player1 && 
+                gridSquare.textContent == '')
+                {
+                    gridSquare.textContent = xMark;
                     
-                    // gridSquare.style.fontSize = '225px';
-                    gridSquare.addEventListener('click', function() {
-
-                        if(currentPlayer === player.player1 && 
-                        gridSquare.textContent == '')
-                        {
-                            gridSquare.textContent = xMark;
-                            
-                            toggleActivePlayer();                           
-                            gameOver();
-                            if(checkForWin(xMark)) 
-                            {
-                                let winningMessage = player.player1.displayPlayer();
-                                    winMessage.append(winningMessage);
-
-                                        for(let i = 0; i < gridSquares.length; i++){
-                                            if(gridSquares[i].textContent == '') 
-                                            {
-                                            gridSquares[i].textContent = '*'
-                                            }
-                                        }
-                                   
-                            }
-                        
-                        
-                        } else if(currentPlayer === player.player2 && gridSquare.textContent == '') 
-                        {
-                            gridSquare.textContent = oMark;
-                            
-                            toggleActivePlayer();
-                            gameOver();
-                            if(checkForWin(oMark)) 
-                            {
-                                let winMessage = document.getElementById('winner-message');
-                            
-
-                                let winningMessage = player.player2.displayPlayer();
-                                    winMessage.append(winningMessage);
-
-                                    for(let i = 0; i < gridSquares.length; i++){
-                                        if(gridSquares[i].textContent == '') 
-                                        {
-                                        gridSquares[i].textContent = '-'
-                                        }
-                                        
-                                    }
-                            }
-                                                  
-                        }
-                       
-        
-                    })    
-   
-            }
-            
-            let currentPlayer = player.player1;
-            const xMark = player.player1.mark;
-            const oMark = player.player2.mark;
-            const tilesArray = Gameboard.gameboard;
-            
-            function checkForWin(playerMark) {
-                const winningCombos = [
-                    [0, 1, 2], [0, 3, 6], [0, 4, 8],
-                    [6, 4, 2], [4, 1, 7], [5, 8, 2],
-                    [6, 7, 8], [3, 4, 5], 
-                ];
-
-                for (const combo of winningCombos) {
-                    const [a, b, c] = combo;
-                    if (tilesArray[a].textContent === playerMark &&
-                        tilesArray[b].textContent === playerMark &&
-                        tilesArray[c].textContent === playerMark) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-
-           
-                // Function to toggle the active player
-            function toggleActivePlayer() {
-                    if (currentPlayer === player.player1) {
-                        currentPlayer = player.player2;
-                    } else {
-                        currentPlayer = player.player1;
-                    }
-                }
-  
-            function gameOver() {
-            let gridSquares = document.getElementsByClassName('grid-cell');
-               // for (let i = 0; i < gridSquares.length; i++){
-                    
-                    
-                    if(
-                    (gridSquares[0].textContent === 'X' || gridSquares[0].textContent === 'O')
-                    && (gridSquares[1].textContent === 'X' || gridSquares[1].textContent === 'O') 
-                    && (gridSquares[2].textContent === 'X' || gridSquares[2].textContent === 'O')
-                    && (gridSquares[3].textContent === 'X' || gridSquares[3].textContent === 'O')
-                    && (gridSquares[4].textContent === 'X' || gridSquares[4].textContent === 'O')
-                    && (gridSquares[5].textContent === 'X' || gridSquares[5].textContent === 'O')
-                    && (gridSquares[6].textContent === 'X' || gridSquares[6].textContent === 'O')
-                    && (gridSquares[7].textContent === 'X' || gridSquares[7].textContent === 'O')
-                    && (gridSquares[8].textContent === 'X' || gridSquares[8].textContent === 'O')
-                    )           
+                    toggleActivePlayer();                           
+                    gameOver();
+                    if(checkForWin(xMark)) 
                     {
-                        let winMessage = document.getElementById('winner-message');
-                        let winningMessage = 'It\'s a tie!';
-                        // winMessage.append(winningMessage);
-                        if(checkForWin(oMark) === false && checkForWin(xMark) === false){
+                        let winningMessage = player.player1.displayPlayer();
                             winMessage.append(winningMessage);
-                        }
-                        
+
+                                for(let i = 0; i < gridSquares.length; i++){
+                                    if(gridSquares[i].textContent == '') 
+                                    {
+                                    gridSquares[i].textContent = '*'
+                                    }
+                                }
+                            
                     }
-              //  }
-               
-               
+                
+                
+                } 
+                else if(currentPlayer === player.player2 && gridSquare.textContent == '') 
+                {
+                    gridSquare.textContent = oMark;
+                    
+                    toggleActivePlayer();
+                    gameOver();
+                    if(checkForWin(oMark)) 
+                    {
+                     let winMessage = document.getElementById('winner-message');
+                
+
+                     let winningMessage = player.player2.displayPlayer();
+                        winMessage.append(winningMessage);
+
+                        for(let i = 0; i < gridSquares.length; i++){
+                            if(gridSquares[i].textContent == '') 
+                            {
+                            gridSquares[i].textContent = '*'
+                            }
+                            
+                        }
+                    }
+                                            
                 }
-        };
+ 
+            })    
+              
+        }
+          
+        function checkForWin(playerMark) {
+            const winningCombos = [
+                [0, 1, 2], [0, 3, 6], [0, 4, 8],
+                [6, 4, 2], [4, 1, 7], [5, 8, 2],
+                [6, 7, 8], [3, 4, 5], 
+            ];
 
+            for (const combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (tilesArray[a].textContent === playerMark &&
+                    tilesArray[b].textContent === playerMark &&
+                    tilesArray[c].textContent === playerMark) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
-        const displayController = (function() {}) ();
+            // Function to toggle the active player
+        function toggleActivePlayer() {
+                if (currentPlayer === player.player1) {
+                    currentPlayer = player.player2;
+                } else {
+                    currentPlayer = player.player1;
+                }
+            }
+
+        function gameOver() {
+        let gridSquares = document.getElementsByClassName('grid-cell');
+            
+                
+                
+                if(
+                (gridSquares[0].textContent === 'X' || gridSquares[0].textContent === 'O')
+                && (gridSquares[1].textContent === 'X' || gridSquares[1].textContent === 'O') 
+                && (gridSquares[2].textContent === 'X' || gridSquares[2].textContent === 'O')
+                && (gridSquares[3].textContent === 'X' || gridSquares[3].textContent === 'O')
+                && (gridSquares[4].textContent === 'X' || gridSquares[4].textContent === 'O')
+                && (gridSquares[5].textContent === 'X' || gridSquares[5].textContent === 'O')
+                && (gridSquares[6].textContent === 'X' || gridSquares[6].textContent === 'O')
+                && (gridSquares[7].textContent === 'X' || gridSquares[7].textContent === 'O')
+                && (gridSquares[8].textContent === 'X' || gridSquares[8].textContent === 'O')
+                )           
+                {
+                    let winMessage = document.getElementById('winner-message');
+                    let winningMessage = 'It\'s a tie!';
+                    
+                    if(checkForWin(oMark) === false && checkForWin(xMark) === false){
+                        winMessage.append(winningMessage);
+                    }
+                    
+                }
+            
+            
+            
+            }
+    
+
+        function clearSquares() {
+                let gridSquares= document.getElementsByClassName('grid-cell');
+
+                for(let i = 0; i < gridSquares.length; i++) {
+                let gridSquare =  gridSquares[i];
+                    gridSquare.textContent = '';                
+                }
+            }
+    };
+
+    const displayController = (function() {}) ();
     </script>
 </body>
 </html>
