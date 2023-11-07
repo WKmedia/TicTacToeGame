@@ -87,6 +87,7 @@
             
             return {
                 gameboard,
+                gamePlayBoard,
                 
             }
         })();
@@ -123,16 +124,14 @@
     function GameFlow() {
             
         clearSquares();
-
+        const winMessage = document.getElementById('winner-message');
+        winMessage.textContent = '';
         let currentPlayer = player.player1;
         const xMark = player.player1.mark;
         const oMark = player.player2.mark;
         const tilesArray = Gameboard.gameboard;
-
-        let winMessage = document.getElementById('winner-message');
-            winMessage.textContent = ''; 
-
         const gridSquares = document.getElementsByClassName('grid-cell');
+
         for (let i = 0; i < gridSquares.length; i++){
             let gridSquare = gridSquares[i];       
             // gridSquare.style.fontSize = '225px';
@@ -186,8 +185,7 @@
                                             
                 }
  
-            })    
-              
+            })       
         }
           
         function checkForWin(playerMark) {
@@ -217,40 +215,20 @@
                 }
             }
 
-        function gameOver() {
-        let gridSquares = document.getElementsByClassName('grid-cell');
-            
-                
-                
-                if(
-                (gridSquares[0].textContent === 'X' || gridSquares[0].textContent === 'O')
-                && (gridSquares[1].textContent === 'X' || gridSquares[1].textContent === 'O') 
-                && (gridSquares[2].textContent === 'X' || gridSquares[2].textContent === 'O')
-                && (gridSquares[3].textContent === 'X' || gridSquares[3].textContent === 'O')
-                && (gridSquares[4].textContent === 'X' || gridSquares[4].textContent === 'O')
-                && (gridSquares[5].textContent === 'X' || gridSquares[5].textContent === 'O')
-                && (gridSquares[6].textContent === 'X' || gridSquares[6].textContent === 'O')
-                && (gridSquares[7].textContent === 'X' || gridSquares[7].textContent === 'O')
-                && (gridSquares[8].textContent === 'X' || gridSquares[8].textContent === 'O')
-                )           
+        function gameOver() {                   
+                if(Array.from(gridSquares).every(square => square.textContent === 'X' || square.textContent === 'O'))           
                 {
-                    let winMessage = document.getElementById('winner-message');
-                    let winningMessage = 'It\'s a tie!';
-                    
-                    if(checkForWin(oMark) === false && checkForWin(xMark) === false){
-                        winMessage.append(winningMessage);
-                    }
-                    
+                  if(checkForWin(oMark) === false && checkForWin(xMark) === false){
+                      
+                     winMessage.textContent = 'It\'s a tie!';
+                
+                   }
                 }
-            
-            
-            
             }
     
 
         function clearSquares() {
-                let gridSquares= document.getElementsByClassName('grid-cell');
-
+                const gridSquares = document.getElementsByClassName('grid-cell');
                 for(let i = 0; i < gridSquares.length; i++) {
                 let gridSquare =  gridSquares[i];
                     gridSquare.textContent = '';                
@@ -258,7 +236,6 @@
             }
     };
 
-    const displayController = (function() {}) ();
     </script>
 </body>
 </html>
