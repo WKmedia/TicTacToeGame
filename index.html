@@ -3,239 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/main.js"></script>
     <title>Tic Tac Toe Game</title>
-    <style>
-        *{
-            box-sizing: border-box;
-        }
-        body{
-            display:flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #start-game{
-            margin-bottom: 15px;
-            height: 40px;
-            width: 140px;
-        }
-        #player-div{
-            display:flex;
-            justify-content: space-between;
-            width:580px;
-            padding: 0 10px;
-            border-radius: 50px;
-            background-color: burlywood;
-        }
-        #winner-display{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            height: 100px;
-            width:400px;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
+   
 </head>
 <body>
     <h1>Tic Tac Toe</h1>
-    <button id="start-game" onclick="GameFlow()">Start Game</button>
+    <button id="start-game" onclick="GameFlow.GamePlay()">Start Game</button>
     <div id="player-div">
-        <h2>Player X </h2>
+        <h2>Player X</h2>
+        <input type="text" id="player1">
+        <input type="text" id="player2">
         <h2>Player O</h2>
+        
+    </div>
+    <div id="players-names">
+        
     </div>
     <div id="winner-display">
         <h3>Winner:</h3>
         <div id="winner-message"></div>
     </div>
 
-    <script>
-        //GAME BOARD
-    const Gameboard = (function createGridCells() {
-        const gameboard = []; 
-
-            const gridSize = 3; // Change this to adjust the grid size
-            const gameCells = gridSize * gridSize;/// multiply gridsize for gameboard
-            const gamePlayBoard = document.createElement('div') 
-                gamePlayBoard.setAttribute('id', 'game-play-board');
-                gamePlayBoard.style.display = 'flex';
-                gamePlayBoard.style.flexWrap = 'wrap';
-                gamePlayBoard.style.width = '454px';
-                gamePlayBoard.style.border = 'solid 1px red';
-                //game-play-board
-            for (let i = 0; i < gameCells; i++) {
-                const gridCell = document.createElement('div');
-                let id = i;
-                let idString = id.toString();
-                gridCell.setAttribute('class', 'grid-cell');
-                gridCell.setAttribute('id', `${idString}`);
-                gridCell.textContent = `${idString}`;
-                gridCell.style.width = '150px'; 
-                gridCell.style.height = '150px'; 
-                gridCell.style.border = 'solid 1px red';
-                gridCell.style.boxSizing = 'border-box';
-                gridCell.style.display = 'flex';
-                // gridCell.style.lineHeight = '195px';
-                gridCell.style.fontSize = '130px'
-                gridCell.style.justifyContent = 'center';
-                gamePlayBoard.append(gridCell);
-                gameboard.push(gridCell);
-                
-            }
-            
-            document.body.append(gamePlayBoard);
-            
-            return {
-                gameboard,
-                gamePlayBoard,
-                
-            }
-        })();
-    
-    const player = (function () {
-            //Create an object and define its properties 
-            const player1 = {
-                name: 'Player-X',
-                mark: 'X',
-                player: 'player1',
-                
-                displayPlayer: function() {
-                    return(`${this.name} ${this.player} won`);
-                },                
-            }
-            //Player 2 Obj
-            const player2 = {
-                name: 'Player-O',
-                mark: 'O',
-                player: 'player2',
-
-                displayPlayer: function() {
-                    return(`${this.name} ${this.player} won`)
-                },
-            } 
-             
-            return {
-                player1,
-                player2
-            }
-
-        })();   
-       
-    function GameFlow() {
-            
-        clearSquares();
-        const winMessage = document.getElementById('winner-message');
-        winMessage.textContent = '';
-        let currentPlayer = player.player1;
-        const xMark = player.player1.mark;
-        const oMark = player.player2.mark;
-        const tilesArray = Gameboard.gameboard;
-        const gridSquares = document.getElementsByClassName('grid-cell');
-
-        for (let i = 0; i < gridSquares.length; i++){
-            let gridSquare = gridSquares[i];       
-            // gridSquare.style.fontSize = '225px';
-            gridSquare.addEventListener('click', function() {
-
-                if(currentPlayer === player.player1 && 
-                gridSquare.textContent == '')
-                {
-                    gridSquare.textContent = xMark;
-                    
-                    toggleActivePlayer();                           
-                    gameOver();
-                    if(checkForWin(xMark)) 
-                    {
-                        let winningMessage = player.player1.displayPlayer();
-                            winMessage.append(winningMessage);
-
-                                for(let i = 0; i < gridSquares.length; i++){
-                                    if(gridSquares[i].textContent == '') 
-                                    {
-                                    gridSquares[i].textContent = '*'
-                                    }
-                                }
-                            
-                    }
-                
-                
-                } 
-                else if(currentPlayer === player.player2 && gridSquare.textContent == '') 
-                {
-                    gridSquare.textContent = oMark;
-                    
-                    toggleActivePlayer();
-                    gameOver();
-                    if(checkForWin(oMark)) 
-                    {
-                     let winMessage = document.getElementById('winner-message');
-                
-
-                     let winningMessage = player.player2.displayPlayer();
-                        winMessage.append(winningMessage);
-
-                        for(let i = 0; i < gridSquares.length; i++){
-                            if(gridSquares[i].textContent == '') 
-                            {
-                            gridSquares[i].textContent = '*'
-                            }
-                            
-                        }
-                    }
-                                            
-                }
- 
-            })       
-        }
-          
-        function checkForWin(playerMark) {
-            const winningCombos = [
-                [0, 1, 2], [0, 3, 6], [0, 4, 8],
-                [6, 4, 2], [4, 1, 7], [5, 8, 2],
-                [6, 7, 8], [3, 4, 5], 
-            ];
-
-            for (const combo of winningCombos) {
-                const [a, b, c] = combo;
-                if (tilesArray[a].textContent === playerMark &&
-                    tilesArray[b].textContent === playerMark &&
-                    tilesArray[c].textContent === playerMark) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-            // Function to toggle the active player
-        function toggleActivePlayer() {
-                if (currentPlayer === player.player1) {
-                    currentPlayer = player.player2;
-                } else {
-                    currentPlayer = player.player1;
-                }
-            }
-
-        function gameOver() {                   
-                if(Array.from(gridSquares).every(square => square.textContent === 'X' || square.textContent === 'O'))           
-                {
-                  if(checkForWin(oMark) === false && checkForWin(xMark) === false){
-                      
-                     winMessage.textContent = 'It\'s a tie!';
-                
-                   }
-                }
-            }
-    
-
-        function clearSquares() {
-                const gridSquares = document.getElementsByClassName('grid-cell');
-                for(let i = 0; i < gridSquares.length; i++) {
-                let gridSquare =  gridSquares[i];
-                    gridSquare.textContent = '';                
-                }
-            }
-    };
-
-    </script>
+   <!-- <script>
+    function getUserInput() {
+        const userInput = document.getElementById('player1').value;
+        console.log(userInput);
+        alert(`You entered: ${userInput}`);
+    }
+   </script> -->
 </body>
 </html>

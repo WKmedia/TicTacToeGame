@@ -1,0 +1,39 @@
+
+*{
+    box-sizing: border-box;
+}
+body{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+#start-game{
+    margin-bottom: 15px;
+    height: 40px;
+    width: 140px;
+}
+#player-div{
+    display:flex;
+    justify-content: space-between;
+    width:580px;
+    padding: 0 10px;
+    border-radius: 50px;
+    background-color: burlywood;
+}
+#players-names{
+    display:flex;
+    justify-content: space-between;
+    width:580px;
+    padding: 0 10px;
+    border-radius: 50px;
+    background-color: burlywood;
+}
+#winner-display{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100px;
+    width:400px;
+    justify-content: center;
+    align-items: center;
+}
